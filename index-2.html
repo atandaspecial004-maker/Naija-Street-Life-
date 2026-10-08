@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lagos Lifestyle</title>
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f1e8;color:#171717}
+.wrap{max-width:620px;margin:auto;padding:18px}
+header{background:#fff1c9;padding:20px;border-radius:22px;margin-bottom:14px}
+h1{margin:0 0 6px;font-size:28px}.money{font-size:34px;font-weight:800}
+.card{background:white;border:1px solid #ddd;border-radius:20px;padding:18px;margin-bottom:14px}
+button{width:100%;padding:15px;margin:7px 0;border:1px solid #ddd;border-radius:14px;background:#fafafa;font-size:16px;font-weight:700;text-align:left}
+button:active{transform:scale(.99)}
+.stats{display:flex;gap:10px}.stat{flex:1;background:#fafafa;padding:12px;border-radius:14px}
+#msg{font-weight:700;margin-top:10px}.small{color:#666}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+<div>🇳🇬 <b>LAGOS LIFESTYLE</b></div>
+<div class="money" id="money">₦20,000</div>
+<div class="small">Survive Lagos. Make money. Become a Big Boss.</div>
+<div class="stats">
+<div class="stat"><b>Day</b><br><span id="day">1</span></div>
+<div class="stat"><b>Status</b><br><span id="status">New in Lagos</span></div>
+</div>
+</header>
+<div class="card">
+<h2 id="title">Welcome to Lagos!</h2>
+<p id="story">You just arrived with ₦20,000. Your choices will decide your future.</p>
+<div id="choices"></div>
+<div id="msg"></div>
+<button id="restart" style="text-align:center">🔄 Start Again</button>
+</div>
+</div>
+<script>
+let money=20000,day=1,step=0;
+const scenes=[
+["🚍 How will you move around Lagos?","Choose your transport.",[
+["🚌 Danfo — ₦500",-500,"You survived the conductor drama 😂"],
+["🛺 Keke — ₦1,000",-1000,"Keke saved you from traffic!"],
+["🚕 Bolt — ₦4,000",-4000,"Comfortable ride, but your wallet is crying 😭"]]],
+["🍛 You are hungry!","Your stomach is making presidential announcements.",[
+["🍲 Roadside food — ₦1,500",-1500,"You ate well. Omo, the pepper was serious! 😂"],
+["🍞 Bread & egg — ₦1,000",-1000,"Simple breakfast. Money saved."],
+["💧 Drink water — ₦0",0,"A true hustler can survive anything!"]]],
+["💼 You found work!","A Lagos opportunity has appeared.",[
+["🏗️ Block industry — +₦8,000",8000,"Hard work paid! You earned ₦8,000."],
+["📱 Content hustle — +₦3,000",3000,"Your content got a small payment."],
+["😴 Sleep — ₦0",0,"You rested, but your bank account did not."]]],
+["💰 Business opportunity!","You have one chance to grow your money.",[
+["🛒 Small trading — +₦12,000",12000,"You sold your goods and made profit!"],
+["📦 Risky deal — -₦5,000",-5000,"The deal failed. Lagos has taught you a lesson 😭"],
+["🏦 Save money — +₦1,000",1000,"You saved wisely and gained a small bonus."]]]
+];
+function naira(n){return "₦"+Math.max(0,n).toLocaleString("en-NG")}
+function render(){
+ document.getElementById("money").textContent=naira(money);
+ document.getElementById("day").textContent=day;
+ document.getElementById("status").textContent=money>=1000000?"Lagos Big Boss 🏆":money>=100000?"Serious Hustler 💪":money<=0?"Broke 😭":"Lagos Hustler";
+ const box=document.getElementById("choices");box.innerHTML="";
+ document.getElementById("msg").textContent="";
+ if(money<=0){document.getElementById("title").textContent="Omo! You don go broke 😭";document.getElementById("story").textContent="Your Lagos journey has ended. Try again and make better choices.";return}
+ if(money>=1000000){document.getElementById("title").textContent="YOU MADE IT! 🏆";document.getElementById("story").textContent="You reached ₦1,000,000 and became a Lagos Big Boss!";return}
+ let s=scenes[step%scenes.length];
+ document.getElementById("title").textContent=s[0];document.getElementById("story").textContent=s[1];
+ s[2].forEach(x=>{let b=document.createElement("button");b.textContent=x[0];b.onclick=()=>{money+=x[1];day++;step++;document.getElementById("msg").textContent=x[2];setTimeout(render,600)};box.appendChild(b)})
+}
+document.getElementById("restart").onclick=()=>{money=20000;day=1;step=0;render()};render();
+</script>
+</body>
+</html>
