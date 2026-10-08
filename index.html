@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Lagos Lifestyle</title>
+<style>
+body{margin:0;font-family:system-ui,Arial;background:#f4f1e8;color:#171717}
+.wrap{max-width:620px;margin:auto;padding:18px}
+.hero,.card{background:white;border:1px solid #ddd;border-radius:20px;padding:18px;margin-bottom:14px}
+.hero{background:linear-gradient(135deg,#f3e5c4,#e5f0e5)}
+.money{font-size:34px;font-weight:800;margin:8px 0}.muted{color:#666}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:12px;border:1px solid #ddd;border-radius:14px}
+button{width:100%;padding:15px;margin:6px 0;border:1px solid #ccc;border-radius:14px;background:#fafafa;font-size:16px;font-weight:700;text-align:left}
+button:active{transform:scale(.99)} .restart{text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="hero">
+<b>🇳🇬 LAGOS LIFESTYLE</b>
+<div class="money" id="money">₦20,000</div>
+<div class="muted">Survive Lagos. Make money. Become a boss.</div>
+<div class="stats">
+<div class="stat"><b>Day</b><div id="day">1</div></div>
+<div class="stat"><b>Status</b><div id="status">New in Lagos</div></div>
+</div>
+</div>
+<div class="card">
+<h2 id="title">You just arrived in Lagos!</h2>
+<p class="muted" id="story">You have ₦20,000. What will you do first?</p>
+<div id="choices"></div>
+<p id="msg"></p>
+<button class="restart" id="restart">🔄 Start Again</button>
+</div>
+</div>
+<script>
+let money=20000,day=1,stage=0;
+const scenes=[
+["How will you move around Lagos?","Choose your transport.",[["🚌 Danfo — ₦500",-500,"You survived the conductor drama 😂"],["🚕 Bolt — ₦4,000",-4000,"Comfortable ride, but your wallet is crying 😭"],["🚶 Trek — ₦0",0,"You trekked like a true hustler."]]],
+["You are hungry!","Your stomach is making presidential announcements.",[["🍛 Roadside food — ₦1,500",-1500,"You ate well 😂"],["🍞 Bread & egg — ₦1,000",-1000,"Simple breakfast. Money saved."],["💧 Water — ₦0",0,"Hunger cannot stop a Lagos hustler!"]]],
+["A job opportunity appears!","Someone offers you a chance to make money.",[["💪 Block industry work +₦8,000",8000,"Hard work paid!"],["📱 Social media hustle +₦3,000",3000,"You made a small payment."],["😴 Sleep +₦0",0,"You rested, but your account did not."]]],
+["Lagos has tested you!","A new opportunity appears.",[["🛒 Small trading +₦12,000",12000,"You made a good profit!"],["🎲 Bad deal -₦5,000",-5000,"Omo! The deal failed 😭"],["💰 Save +₦1,000",1000,"You saved wisely."]]]
+];
+function naira(n){return "₦"+Math.max(0,n).toLocaleString("en-NG")}
+function render(){
+ document.getElementById("money").textContent=naira(money);
+ document.getElementById("day").textContent=day;
+ document.getElementById("status").textContent=money>=1000000?"Lagos Big Boss 🏆":money>=100000?"Hustler 💪":money<=0?"Broke 😭":"Lagos Hustler";
+ const box=document.getElementById("choices");box.innerHTML="";
+ if(money<=0){document.getElementById("title").textContent="Omo! You don go broke 😭";document.getElementById("story").textContent="Try again and make better choices.";return}
+ if(money>=1000000){document.getElementById("title").textContent="YOU MADE IT! 🏆";document.getElementById("story").textContent="You reached ₦1,000,000 and became a Lagos Big Boss!";return}
+ const s=scenes[stage%scenes.length];
+ document.getElementById("title").textContent=s[0];document.getElementById("story").textContent=s[1];
+ s[2].forEach(x=>{let b=document.createElement("button");b.textContent=x[0];b.onclick=()=>{money=Math.max(0,money+x[1]);day++;stage++;document.getElementById("msg").textContent=x[2];setTimeout(render,500)};box.appendChild(b)})
+}
+document.getElementById("restart").onclick=()=>{money=20000;day=1;stage=0;document.getElementById("msg").textContent="";render()};
+render();
+</script>
+</body>
+</html>
